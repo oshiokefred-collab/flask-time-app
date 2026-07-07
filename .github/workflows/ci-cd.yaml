@@ -26,8 +26,8 @@ jobs:
           context: ./app
           push: true
           tags: |
-            ${{ secrets.DOCKER_USERNAME }}/flask-time:${{ env.SHORT_SHA }}
-            ${{ secrets.DOCKER_USERNAME }}/flask-time:latest
+            ${{ secrets.DOCKER_USERNAME }}/flask-app:${{ env.SHORT_SHA }}
+            ${{ secrets.DOCKER_USERNAME }}/flask-app:latest
 
       - name: Update Helm chart image tag
         run: |

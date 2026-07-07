@@ -1,6 +1,6 @@
 replicaCount: 1
 image:
-  repository: oshiokefred-collab/flask-time
+  repository: spygee/flask-app
   tag: "latest"
   pullPolicy: IfNotPresent
 service:
