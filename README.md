@@ -29,31 +29,36 @@ cd flask-time-app
 ```
 
 ### 2. Start Minikube Cluster
-bash
+```
 minikube start --driver=docker --kubernetes-version=1.30.0
+```
 Verify the cluster:
-
+```
 bash
 kubectl get nodes
-
+```
 ### 3. Deploy Argo CD with Terraform
 Navigate to the terraform/ folder and apply:
+```
 
-bash
 cd terraform
 terraform init
 terraform apply -auto-approve
+```
 This installs Argo CD in the argocd namespace using the official Helm chart (version 5.51.6).
 
 Retrieve the admin password:
+```
 
-bash
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d ; echo
-Port-forward the dashboard:
+```
 
-bash
+Port-forward the dashboard:
+```
+
 kubectl port-forward svc/argocd-server -n argocd 8081:443
 Login at https://localhost:8081 with user admin and the password.
+```
 
 ### 4. Configure GitHub Secrets
 In your GitHub repository, add the following secrets (Settings → Secrets and variables → Actions):
@@ -65,22 +70,27 @@ DOCKER_PASSWORD – a Docker Hub access token with read/write permissions
 Also enable Read and write permissions for GitHub Actions under Settings → Actions → General → Workflow permissions.
 
 ### 5. Apply the Argo CD Application
-bash
+```
+
 kubectl apply -f argocd/application.yaml
+```
 This tells Argo CD to monitor the helm/flask-app path on the master branch and auto-sync.
 
 ### 6. Trigger the CI/CD Pipeline
 Make a small change (e.g., edit app/app.py and commit):
+```
 
-bash
 git add .
 git commit -m "Update time format"
 git push origin master
+```
 The GitHub Actions workflow will run, build the image, push it to Docker Hub, and update the Helm chart. Argo CD will then deploy the new version.
 
 ### 7. Test the App
-bash
+```
+
 kubectl port-forward svc/flask-app 8080:8080
+```
 Open http://localhost:8080 – you should see the current time.
 
 ### Screenshots
