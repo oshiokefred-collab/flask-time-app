@@ -1,7 +1,7 @@
 replicaCount: 1
 image:
   repository: spygee/flask-app
-  tag: "7375c9c"
+  tag: "dfca8d5"
   pullPolicy: IfNotPresent
 service:
   type: ClusterIP
