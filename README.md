@@ -23,17 +23,20 @@ All tools are free and were installed on Windows without admin rights.
 ## Setup Instructions
 
 ### 1. Clone the Repository
-```bash
+```
 git clone https://github.com/oshiokefred-collab/flask-time-app.git
 cd flask-time-app
-2. Start Minikube Cluster
+```
+
+### 2. Start Minikube Cluster
 bash
 minikube start --driver=docker --kubernetes-version=1.30.0
 Verify the cluster:
 
 bash
 kubectl get nodes
-3. Deploy Argo CD with Terraform
+
+### 3. Deploy Argo CD with Terraform
 Navigate to the terraform/ folder and apply:
 
 bash
@@ -52,7 +55,7 @@ bash
 kubectl port-forward svc/argocd-server -n argocd 8081:443
 Login at https://localhost:8081 with user admin and the password.
 
-4. Configure GitHub Secrets
+### 4. Configure GitHub Secrets
 In your GitHub repository, add the following secrets (Settings → Secrets and variables → Actions):
 
 DOCKER_USERNAME – your Docker Hub username (spygee)
@@ -61,12 +64,12 @@ DOCKER_PASSWORD – a Docker Hub access token with read/write permissions
 
 Also enable Read and write permissions for GitHub Actions under Settings → Actions → General → Workflow permissions.
 
-5. Apply the Argo CD Application
+### 5. Apply the Argo CD Application
 bash
 kubectl apply -f argocd/application.yaml
 This tells Argo CD to monitor the helm/flask-app path on the master branch and auto-sync.
 
-6. Trigger the CI/CD Pipeline
+### 6. Trigger the CI/CD Pipeline
 Make a small change (e.g., edit app/app.py and commit):
 
 bash
@@ -75,12 +78,12 @@ git commit -m "Update time format"
 git push origin master
 The GitHub Actions workflow will run, build the image, push it to Docker Hub, and update the Helm chart. Argo CD will then deploy the new version.
 
-7. Test the App
+### 7. Test the App
 bash
 kubectl port-forward svc/flask-app 8080:8080
 Open http://localhost:8080 – you should see the current time.
 
-Screenshots
+### Screenshots
 1. Deployed Application (updated time format)
 https://screenshots/app_output.png
 
@@ -101,7 +104,7 @@ https://screenshots/kubectl_pod_image.png
 
 (Additional screenshot: old_time_format.png shows the original time format before the update.)
 
-Challenges & Solutions
+### Challenges & Solutions
 Terraform Minikube provider hung – Started the cluster manually with minikube start and used Terraform only for Argo CD.
 
 Empty kubeconfig – Deleted the file and restarted Minikube to regenerate it.
@@ -112,7 +115,7 @@ Git merge conflicts – Pulled remote changes before pushing, completed a merge 
 
 Port-forward conflict – Killed the old process using netstat and taskkill.
 
-Future Improvements (as highlighted in the tutor’s notes)
+### Future Improvements (as highlighted in the tutor’s notes)
 Add automated tests (unit, linting) before the build step.
 
 Use a remote Terraform state backend (e.g., S3, Terraform Cloud).
